@@ -1,0 +1,61 @@
+package filesystemservice
+
+MIA_P2_carnet/
+├── main.go                          → solo arranca el servidor HTTP (ya no hay modo CLI)
+├── Router/
+│   └── Routes.go                    → registra TODAS las rutas
+├── Controllers/
+│   ├── diskController.go            → mkdisk, fdisk, rmdisk, mount, unmount, mkfs
+│   ├── fileSystemController.go      → mkdir, mkfile, remove, edit, rename, copy, move, ls (visualizador)
+│   ├── userController.go            → login, logout, mkgrp, rmgrp, mkusr, rmusr, chgrp
+│   ├── reportController.go          → todos los reportes (mbr, disk, tree, inode, block, bitmaps)
+│   └── scriptController.go          → el endpoint de carga masiva de .smia
+├── Services/
+│   ├── DiskService/
+│   │   ├── mkdisk.go                → CrearDiscoLogico (ya existe, se mueve aqui)
+│   │   ├── fdisk.go                 → CrearParticionLogico, EliminarParticionLogico, AjustarTamañoParticionLogico
+│   │   ├── rmdisk.go
+│   │   └── mount.go                 → MontarLogico, DesmontarLogico
+│   ├── FileSystemService/
+│   │   ├── mkfs.go
+│   │   ├── mkdir.go
+│   │   ├── mkfile.go
+│   │   ├── remove.go                → nuevo
+│   │   ├── edit.go                  → nuevo
+│   │   ├── rename.go                → nuevo
+│   │   ├── copy.go                  → nuevo
+│   │   ├── move.go                  → nuevo
+│   │   └── navegacion.go            → ListarCarpeta, LeerArchivo (para el visualizador)
+│   ├── UserService/
+│   │   ├── login.go
+│   │   ├── mkgrp.go
+│   │   ├── mkusr.go
+│   │   └── ...
+│   ├── ReportService/
+│   │   ├── mbrReport.go
+│   │   ├── treeReport.go
+│   │   └── ... (ya tienes la mayoria, solo se adaptan para retornar el SVG/bytes en vez de solo guardar archivo)
+│   └── ScriptService/
+│       └── ejecutarScript.go        → el parser de texto reubicado aqui, despachando a los demas Services
+├── Models/
+│   ├── diskModels.go                 (ya existe)
+│   ├── fileSystemModels.go           → nuevo (requests/responses de mkdir, mkfile, remove, etc.)
+│   ├── userModels.go                 → nuevo
+│   └── reportModels.go               → nuevo
+├── Structs/                          → SE QUEDA IGUAL, sin cambios (MBR, Inode, Superblock, etc.)
+└── Herramientas/                     → SE QUEDA IGUAL, sin cambios (OpenFile, ReadObject, WriteObject, etc.)
+
+
+
+
+
+BACKEND (Go)
+├── Services/FileSystemService/mkdir.go     → la logica pura (ya casi la tienes de Fase 1)
+├── Models/fileSystemModels.go              → forma del JSON
+├── Controllers/fileSystemController.go     → el handler HTTP para mkdir
+├── Controllers/scriptController.go         → el handler para ejecutar scripts (incluye mkdir)
+└── Router/Routes.go                        → registra las 2 rutas nuevas
+
+FRONTEND (framework web)
+├── Un formulario con botones (path, checkbox -p) → llama al endpoint directo
+└── Un área de texto/subida de archivo            → llama al endpoint de script

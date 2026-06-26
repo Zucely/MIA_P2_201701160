@@ -1,6 +1,20 @@
 package main
 
 import (
+	Router "MIA_P1/Router"
+	"fmt"
+	"net/http"
+)
+
+func main() {
+	Router.SetupRoutes()
+	fmt.Println("Servidor corriendo en puerto 8080...")
+	http.ListenAndServe(":8080", nil)
+}
+
+// ========================================== Funcion main de la fase 1 =============================================
+/*
+import (
 	DM "MIA_P1/Comandos/AdmDeDiscos"
 	FD "MIA_P1/Comandos/CarpetasArchivos"
 	REP "MIA_P1/Comandos/Reports"
@@ -222,3 +236,4 @@ func analizar(entrada string) {
 	}
 
 }
+*/
